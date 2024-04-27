@@ -1,45 +1,78 @@
-﻿using DCXAirChallenge.Domain.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DCXAirChallenge.Domain.Entities;
 using DCXAirChallenge.Infrastructure.Services;
 
 namespace DCXAirChallenge.Application.Services
 {
-    public class RouteService(RouteLoaderService routeLoaderService)
+    public class RouteService
     {
-        private List<Routes> _routes = routeLoaderService.LoadRoutes("Data/markets.json");
+        private readonly List<Routes> _routes;
 
-        public List<Routes> GetRoutesByOriginAndDestination(string origin, string destination)
+        // Constructor de la clase RouteService
+        public RouteService(RouteLoaderService routeLoaderService)
         {
+            // Cargar las rutas desde el servicio de carga de rutas
+            _routes = routeLoaderService.LoadRoutes("Data/markets.json");
+        }
 
-            // Convertir los códigos de origen y destino a mayúsculas para realizar una comparación sin distinción entre mayúsculas y minúsculas
-            origin = origin.ToUpper();
-            destination = destination.ToUpper();
+        // Método para encontrar las rutas más cortas entre un origen y un destino
+        public List<Routes[]> GetShortestRoutesByOriginAndDestination(string origin, string destination)
+        {
+            // Convertir el origen y el destino a mayúsculas y eliminar espacios en blanco al inicio y al final
+            origin = origin.Trim().ToUpper();
+            destination = destination.Trim().ToUpper();
 
-            // Filtrar las rutas por origen y destino
-            var filteredRoutes = _routes.Where(route => route.Origin.ToUpper() == origin && route.Destination.ToUpper() == destination).ToList();
+            // Lista para almacenar las posibles rutas encontradas
+            var possibleRoutes = new List<List<Routes>>();
 
-            // Si no se encontraron rutas, se podría intentar invertir el origen y el destino para ver si hay una ruta en la dirección opuesta
-            if (filteredRoutes.Count == 0)
+            // Conjunto para almacenar los destinos visitados durante el proceso
+            var visited = new HashSet<string>();
+
+            // Cola para realizar el recorrido en anchura (BFS) a través de las rutas
+            var queue = new Queue<List<Routes>>();
+
+            // Inicializar la cola con rutas que comienzan en el origen
+            foreach (var route in _routes.Where(r => r.Origin == origin))
             {
-                Console.WriteLine($"No se encontraron rutas directas de {origin} a {destination}. Intentando buscar rutas inversas...");
+                queue.Enqueue(new List<Routes> { route });
+                visited.Add(route.Destination);
+            }
 
-                // Intentar invertir los códigos de origen y destino
-                filteredRoutes = _routes.Where(route => route.Origin.ToUpper() == destination && route.Destination.ToUpper() == origin).ToList();
+            // Realizar el recorrido en anchura a través de las rutas
+            while (queue.Count > 0)
+            {
+                var currentRoute = queue.Dequeue(); // Obtener la siguiente ruta de la cola
+                var lastDestination = currentRoute.Last().Destination; // Obtener el último destino en la ruta actual
 
-                if (filteredRoutes.Count > 0)
+                // Si el último destino coincide con el destino final, agregar la ruta a las posibles rutas
+                if (lastDestination == destination)
                 {
-                    Console.WriteLine($"Se encontraron rutas inversas de {destination} a {origin}.");
+                    possibleRoutes.Add(currentRoute);
+                    continue;
                 }
-                else
+
+                // Iterar sobre las rutas disponibles desde el último destino en la ruta actual
+                foreach (var nextRoute in _routes.Where(r => r.Origin == lastDestination && !visited.Contains(r.Destination)))
                 {
-                    Console.WriteLine($"No se encontraron rutas inversas de {destination} a {origin}.");
+                    var newRoute = new List<Routes>(currentRoute); // Crear una nueva ruta basada en la ruta actual
+                    newRoute.Add(nextRoute); // Agregar la próxima ruta a la nueva ruta
+                    queue.Enqueue(newRoute); // Agregar la nueva ruta a la cola para su procesamiento posterior
+                    visited.Add(nextRoute.Destination); // Marcar el destino de la próxima ruta como visitado
                 }
+            }
+
+            // Encontrar las rutas más cortas entre el origen y el destino
+            if (possibleRoutes.Any())
+            {
+                var shortestLength = possibleRoutes.Min(route => route.Count); // Obtener la longitud más corta entre las posibles rutas
+                var shortestRoutes = possibleRoutes.Where(route => route.Count == shortestLength).ToList(); // Filtrar las posibles rutas para obtener las más cortas
+                return shortestRoutes.Select(route => route.ToArray()).ToList(); // Convertir las rutas más cortas a matrices y devolverlas como una lista
             }
             else
             {
-                Console.WriteLine($"Se encontraron rutas directas de {origin} a {destination}.");
+                return new List<Routes[]>(); // Si no se encontraron rutas posibles, devolver una lista vacía
             }
-
-            return filteredRoutes;
         }
     }
 }

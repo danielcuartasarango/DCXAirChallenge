@@ -13,7 +13,7 @@ namespace DCXAirChallenge.Controllers
         public IActionResult GetRoutes(string origin, string destination)
         {
             Console.WriteLine("-------");
-            var routes = _routeService.GetRoutesByOriginAndDestination(origin, destination);
+            var routes = _routeService.GetShortestRoutesByOriginAndDestination(origin, destination);
             return Ok(routes);
         }
     }
