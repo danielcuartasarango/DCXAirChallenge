@@ -5,18 +5,14 @@ namespace DCXAirChallenge.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FlightController : ControllerBase
+    public class FlightController(RouteService routeService) : ControllerBase
     {
-        private readonly RouteService _routeService;
-
-        public FlightController(RouteService routeService)
-        {
-            _routeService = routeService;
-        }
+        private readonly RouteService _routeService = routeService;
 
         [HttpGet("routes")]
         public IActionResult GetRoutes(string origin, string destination)
         {
+            Console.WriteLine("-------");
             var routes = _routeService.GetRoutesByOriginAndDestination(origin, destination);
             return Ok(routes);
         }
