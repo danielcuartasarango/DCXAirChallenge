@@ -1,29 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // Import FormsModule for template-driven forms
+import { FlightSearchService } from '../services/flight-search.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
-  styleUrls: ['./search-form.component.css']
+  styleUrls: ['./search-form.component.css'],
+  standalone: true,
+  imports: [ // Add FormsModule and CommonModule to imports
+    FormsModule,
+    CommonModule
+  ]
 })
 export class SearchFormComponent implements OnInit {
-  searchForm!: FormGroup; // Usamos el operador '!' para indicar que será inicializado en el constructor
+  searchForm: any = {}; // Initialize searchForm as an object
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private flightSearchService: FlightSearchService // Removed FormBuilder
+  ) { }
 
   ngOnInit(): void {
-    this.searchForm = this.fb.group({
-      origin: ['', Validators.required],
-      destination: ['', Validators.required],
-      currency: ['USD', Validators.required],
-      roundTrip: [false]
-    });
+    this.searchForm = {
+      origin: '',
+      destination: '',
+      currency: 'USD',
+      roundTrip: false
+    };
   }
 
-  submitForm(): void {
-    if (this.searchForm.valid) {
-      // Aquí puedes enviar la solicitud a la API con los parámetros del formulario
-      console.log('Formulario enviado:', this.searchForm.value);
-    }
+  nombre: string = '';
+
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    console.log('Formulario enviado:', this.searchForm); // Log the entire searchForm object
   }
 }
