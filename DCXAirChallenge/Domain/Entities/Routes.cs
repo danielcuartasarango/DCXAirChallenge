@@ -1,6 +1,6 @@
 ﻿namespace DCXAirChallenge.Domain.Entities
 {
-    public class Route
+    public class Routes
     {
         public string Origin { get; set; }
         public string Destination { get; set; }
