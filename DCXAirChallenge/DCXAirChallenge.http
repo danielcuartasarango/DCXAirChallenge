@@ -1,0 +1,6 @@
+@DCXAirChallenge_HostAddress = http://localhost:5264
+
+GET {{DCXAirChallenge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
