@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule for template-driven forms
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'; // Import FormsModule for template-driven forms
 import { FlightSearchService } from '../services/flight-search.service';
 import { CommonModule } from '@angular/common';
 
@@ -10,29 +10,38 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ // Add FormsModule and CommonModule to imports
     FormsModule,
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ]
 })
 export class SearchFormComponent implements OnInit {
-  searchForm: any = {}; // Initialize searchForm as an object
+  searchForm!: FormGroup;
 
-  constructor(
-    private flightSearchService: FlightSearchService // Removed FormBuilder
-  ) { }
+  constructor(private fb: FormBuilder,  private flightSearchService: FlightSearchService) { }
 
   ngOnInit(): void {
-    this.searchForm = {
-      origin: '',
-      destination: '',
-      currency: 'USD',
-      roundTrip: false
-    };
+    this.searchForm = this.fb.group({
+      origin: ['', Validators.required],
+      destination: ['', Validators.required],
+      currency: ['USD'],
+      roundTrip: [false]
+    });
   }
 
-  nombre: string = '';
-
-  onSubmit(event: Event): void {
-    event.preventDefault();
-    console.log('Formulario enviado:', this.searchForm); // Log the entire searchForm object
+  onSubmit() {
+    if (this.searchForm.valid) {
+      const searchParams = this.searchForm.value; // Access form data
+      this.flightSearchService.searchFlights(searchParams)
+        .subscribe(response => {
+          console.log('Flight search results:', response);
+          // Handle successful flight search response (e.g., display results)
+        }, error => {
+          console.error('Error searching flights:', error);
+          // Handle errors during flight search
+        });
+    } else {
+      console.error('Search form is invalid.');
+      // Handle form validation errors (e.g., display error messages)
+    }
   }
 }

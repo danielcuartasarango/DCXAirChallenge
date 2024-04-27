@@ -13,6 +13,15 @@ builder.Services.AddSingleton<RouteService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Replace with your Angular project's origin
+             .AllowAnyHeader()
+             .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -26,6 +35,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+app.UseCors("AllowAngular"); // Add this line before MapControllers
 
 app.UseAuthorization();
 
