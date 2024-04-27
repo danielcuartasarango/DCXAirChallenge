@@ -1,0 +1,64 @@
+/* Estilos para el formulario de búsqueda */
+
+/* Contenedor principal del formulario */
+.search-form-container {
+    max-width: 500px; /* Ancho máximo para evitar que el formulario se extienda demasiado en pantallas grandes */
+    margin: 0 auto; /* Centra el formulario horizontalmente en la página */
+    padding: 20px;
+  }
+  
+  /* Estilos para los campos de entrada */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Estilos para las etiquetas */
+  label {
+    display: block; /* Muestra las etiquetas en una línea separada para mayor claridad */
+    font-weight: bold;
+  }
+  
+  /* Estilos para los campos de texto y select */
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total del campo */
+  }
+  
+  /* Estilos para el botón de enviar */
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Estilos para el botón de enviar cuando está deshabilitado */
+  button[type="submit"]:disabled {
+    background-color: #ccc; /* Cambia el color de fondo cuando el botón está deshabilitado */
+    cursor: not-allowed; /* Cambia el cursor cuando el botón está deshabilitado */
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .search-form-container {
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Efecto de sombra */
+  }
+  
+  /* Resto de estilos del formulario aquí */
+  
+  
