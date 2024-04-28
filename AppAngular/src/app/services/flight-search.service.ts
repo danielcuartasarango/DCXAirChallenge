@@ -17,3 +17,4 @@ export class FlightSearchService {
     return this.http.get(apiUrl);
   }
 }
+  

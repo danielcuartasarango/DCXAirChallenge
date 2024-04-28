@@ -16,8 +16,18 @@ namespace DCXAirChallenge.Application.Services
             _routes = routeLoaderService.LoadRoutes("Data/markets.json");
         }
 
+
+        public class RouteInformation
+        {
+            public List<Routes> ListRoutes { get; set; }
+            public double PriceTotal { get; set; } // Cambiar el tipo a double
+            public string OriginInicial { get; set; }
+            public string DestinationFinal { get; set; }
+        }
+
+
         // Método para encontrar las rutas posibles entre un origen y un destino
-        public List<Routes[]> GetRoutesByOriginAndDestination(string origin, string destination, int travelType)
+        public List<RouteInformation> GetRoutesByOriginAndDestination(string origin, string destination, int travelType)
         {
             // Convertir el origen y el destino a mayúsculas y eliminar espacios en blanco al inicio y al final
             origin = origin.Trim().ToUpper();
@@ -51,40 +61,55 @@ namespace DCXAirChallenge.Application.Services
                 foreach (var nextRoute in _routes.Where(r => r.Origin == lastDestination))
                 {
                     // Evitar ciclos infinitos permitiendo visitar destinos múltiples veces
-                    if (!currentRoute.Any(r => r.Destination == nextRoute.Destination))
+                    if (!currentRoute.Any(r => r.Destination == nextRoute.Destination) &&
+                        !(travelType == 2 && nextRoute.Destination == origin)) // Evitar volver al origen antes de llegar al destino final en viajes de ida y vuelta
                     {
                         var newRoute = new List<Routes>(currentRoute); // Crear una nueva ruta basada en la ruta actual
                         newRoute.Add(nextRoute); // Agregar la próxima ruta a la nueva ruta
                         queue.Enqueue(newRoute); // Agregar la nueva ruta a la cola para su procesamiento posterior
                     }
                 }
+
             }
 
             // Convertir todas las rutas posibles a matrices y devolverlas como una lista
             var allPossibleRoutes = possibleRoutes.Select(route => route.ToArray()).ToList();
 
             // Clasificar las rutas
-            foreach (var route in allPossibleRoutes)
+            // Clasificar las rutas
+            foreach (var routeArray in allPossibleRoutes)
             {
-                if (route.Length == 1 && travelType == 1)
+                foreach (var route in routeArray)
                 {
-                    route[0].Category = "Ruta Solo Ida (Oneway)";
-                }
-                else if (route.Length == 1 && travelType == 2)
-                {
-                    route[0].Category = "Ruta Ida y Vuelta (Roundtrip)";
-                }
-                else if (route.Length > 1 && travelType == 1)
-                {
-                    route[0].Category = "Ruta con Múltiples Vuelos - Solo Ida";
-                }
-                else if (route.Length > 1 && travelType == 2)
-                {
-                    route[0].Category = "Ruta con Múltiples Vuelos - (Roundtrip)";
+                    if (travelType == 1)
+                    {
+                        route.Category = "Ruta Solo Ida (Oneway)";
+                    }
+                    else if (travelType == 2)
+                    {
+                        route.Category = "Ruta Ida y Vuelta (Roundtrip)";
+                    }
                 }
             }
+            // Crear una lista para almacenar la información de la ruta
+            var routeInformationList = new List<RouteInformation>();
 
-            return allPossibleRoutes;
+            // Clasificar las rutas y crear objetos RouteInformation
+            foreach (var routeArray in allPossibleRoutes)
+            {
+                var routeInformation = new RouteInformation
+                {
+                    ListRoutes = routeArray.ToList(),
+                    PriceTotal = routeArray.Sum(r => r.Price),
+
+                    OriginInicial = routeArray.First().Origin,
+                    DestinationFinal = routeArray.Last().Destination
+                };
+
+                routeInformationList.Add(routeInformation);
+            }
+
+            return routeInformationList;
         }
     }
-    }
+}
