@@ -27,7 +27,7 @@ namespace DCXAirChallenge.Application.Services
 
 
         // Método para encontrar las rutas posibles entre un origen y un destino
-        public List<RouteInformation> GetRoutesByOriginAndDestination(string origin, string destination, int travelType)
+        public List<RouteInformation> GetRoutesByOriginAndDestination(string origin, string destination,  string currency, string tripType)
         {
             // Convertir el origen y el destino a mayúsculas y eliminar espacios en blanco al inicio y al final
             origin = origin.Trim().ToUpper();
@@ -62,7 +62,7 @@ namespace DCXAirChallenge.Application.Services
                 {
                     // Evitar ciclos infinitos permitiendo visitar destinos múltiples veces
                     if (!currentRoute.Any(r => r.Destination == nextRoute.Destination) &&
-                        !(travelType == 2 && nextRoute.Destination == origin)) // Evitar volver al origen antes de llegar al destino final en viajes de ida y vuelta
+                        !(tripType == "roundTrip" && nextRoute.Destination == origin)) // Evitar volver al origen antes de llegar al destino final en viajes de ida y vuelta
                     {
                         var newRoute = new List<Routes>(currentRoute); // Crear una nueva ruta basada en la ruta actual
                         newRoute.Add(nextRoute); // Agregar la próxima ruta a la nueva ruta

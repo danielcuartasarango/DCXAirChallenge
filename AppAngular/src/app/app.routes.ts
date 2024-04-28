@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { SearchFormComponent } from './search-form/search-form.component';
-import { SearchResultsComponent } from './search-results/search-results.component';
+import { SearchFormComponent } from './components/search-form/search-form.component';
+import { SearchResultsComponent } from './components/search-results/search-results.component';
 
 export const routes: Routes = [
   { path: 'search', component: SearchFormComponent },

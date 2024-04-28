@@ -15,10 +15,10 @@ namespace DCXAirChallenge.Controllers
         }
 
         [HttpGet("routes")]
-        public IActionResult GetRoutes([FromQuery] string origin, [FromQuery] string destination, [FromQuery] string destination, [FromQuery] string destination)
+        public IActionResult GetRoutes([FromQuery] string origin, [FromQuery] string destination, [FromQuery] string currency, [FromQuery] string tripType)
         {
             Console.WriteLine(origin + destination);
-            var routes = _routeService.GetRoutesByOriginAndDestination(origin, destination, 2);
+            var routes = _routeService.GetRoutesByOriginAndDestination(origin, destination, tripType, currency);
             return Ok(routes);
         }
     }

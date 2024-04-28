@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FlightSearchService } from '../services/flight-search.service';
+import { FlightSearchService } from '../../services/flight-search.service';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { CommonModule } from '@angular/common';
 
