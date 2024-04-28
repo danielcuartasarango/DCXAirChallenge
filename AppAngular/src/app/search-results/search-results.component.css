@@ -1,0 +1,30 @@
+.flight-results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1rem;
+  }
+  
+  .flight-card {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Box shadow */
+    background-color: #fff;
+    width: 300px; /* Base width */
+  }
+  
+  /* Responsive: adjust card width based on screen size */
+  @media (max-width: 768px) {
+    .flight-card {
+      width: 100%; /* 100% width on small screens */
+    }
+  }
+  .flight-leg {
+    background-color: #eee; /* Adjust background color as needed */
+    border: 1px solid #ddd; /* Adjust border style, width, and color */
+    padding: 5px 10px; /* Adjust padding as needed */
+    margin: 5px; /* Adjust margin as needed */
+    display: inline-block; /* Ensures elements appear side-by-side */
+  }
+  

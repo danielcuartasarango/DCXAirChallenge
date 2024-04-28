@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { Component, Injectable, Input, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SearchFormComponent } from '../search-form/search-form.component';
 @Component({
   selector: 'app-search-results',
   standalone: true,
-  imports: [],
+  imports: [ 
+  FormsModule,
+  CommonModule,
+  ReactiveFormsModule,
+  SearchFormComponent,
+  
+],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.css'
 })
-export class SearchResultsComponent {
+@Injectable() 
+export class SearchResultsComponent implements OnInit {
+  @Input() flightResults!: any[];
 
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 }

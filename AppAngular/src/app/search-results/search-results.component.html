@@ -1,1 +1,27 @@
-<p>search-results works!</p>
+<div *ngIf="flightResults && flightResults.length > 0">
+  <div class="flight-results">
+    <div *ngFor="let flight of flightResults">
+      <div class="flight-card">
+        <div class="flight-details">
+          <div class="flight-info">
+            <span class="origin">{{ flight.origin }}</span>
+            <span class="destination">{{ flight.destination }}</span>
+            <span class="price">USD$ {{ flight.price }}</span>
+          </div>
+          <div class="flight-legs">
+            <div class="flight-leg-container">
+              <div class="flight-leg" *ngFor="let leg of flight.flights">
+                <span class="origin">{{ leg.origin }} - </span>
+                <span class="destination">{{ leg.destination }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="flight-carrier">
+            <span class="carrier">{{ flight.flights[0].transport.flightCarrier }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

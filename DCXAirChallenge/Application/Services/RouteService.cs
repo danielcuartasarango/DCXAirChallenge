@@ -19,10 +19,10 @@ namespace DCXAirChallenge.Application.Services
 
         public class RouteInformation
         {
-            public List<Routes> ListRoutes { get; set; }
-            public double PriceTotal { get; set; } // Cambiar el tipo a double
-            public string OriginInicial { get; set; }
-            public string DestinationFinal { get; set; }
+            public List<Routes> Flights { get; set; }
+            public double Price { get; set; } // Cambiar el tipo a double
+            public string Origin { get; set; }
+            public string Destination { get; set; }
         }
 
 
@@ -69,28 +69,11 @@ namespace DCXAirChallenge.Application.Services
                         queue.Enqueue(newRoute); // Agregar la nueva ruta a la cola para su procesamiento posterior
                     }
                 }
-
             }
 
             // Convertir todas las rutas posibles a matrices y devolverlas como una lista
             var allPossibleRoutes = possibleRoutes.Select(route => route.ToArray()).ToList();
 
-            // Clasificar las rutas
-            // Clasificar las rutas
-            foreach (var routeArray in allPossibleRoutes)
-            {
-                foreach (var route in routeArray)
-                {
-                    if (travelType == 1)
-                    {
-                        route.Category = "Ruta Solo Ida (Oneway)";
-                    }
-                    else if (travelType == 2)
-                    {
-                        route.Category = "Ruta Ida y Vuelta (Roundtrip)";
-                    }
-                }
-            }
             // Crear una lista para almacenar la información de la ruta
             var routeInformationList = new List<RouteInformation>();
 
@@ -99,11 +82,11 @@ namespace DCXAirChallenge.Application.Services
             {
                 var routeInformation = new RouteInformation
                 {
-                    ListRoutes = routeArray.ToList(),
-                    PriceTotal = routeArray.Sum(r => r.Price),
+                    Flights = routeArray.ToList(),
+                    Price = routeArray.Sum(r => r.Price),
 
-                    OriginInicial = routeArray.First().Origin,
-                    DestinationFinal = routeArray.Last().Destination
+                    Origin = routeArray.First().Origin,
+                    Destination = routeArray.Last().Destination
                 };
 
                 routeInformationList.Add(routeInformation);
@@ -111,5 +94,6 @@ namespace DCXAirChallenge.Application.Services
 
             return routeInformationList;
         }
+
     }
 }

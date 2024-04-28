@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'; // Import FormsModule for template-driven forms
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FlightSearchService } from '../services/flight-search.service';
+import { SearchResultsComponent } from '../search-results/search-results.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,16 +9,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './search-form.component.html',
   styleUrls: ['./search-form.component.css'],
   standalone: true,
-  imports: [ // Add FormsModule and CommonModule to imports
-    FormsModule,
+  imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SearchResultsComponent
   ]
 })
 export class SearchFormComponent implements OnInit {
   searchForm!: FormGroup;
+  flightSearchResults: any[] = [];
+  showResults = false; // Flag to control results display
 
-  constructor(private fb: FormBuilder,  private flightSearchService: FlightSearchService) { }
+  constructor(private fb: FormBuilder, private flightSearchService: FlightSearchService) { }
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
@@ -30,18 +33,18 @@ export class SearchFormComponent implements OnInit {
 
   onSubmit() {
     if (this.searchForm.valid) {
-      const searchParams = this.searchForm.value; // Access form data
+      const searchParams = this.searchForm.value;
       this.flightSearchService.searchFlights(searchParams)
         .subscribe(response => {
+          this.flightSearchResults = response;
+          this.showResults = true; // Show results if data is received
           console.log('Flight search results:', response);
-          // Handle successful flight search response (e.g., display results)
         }, error => {
           console.error('Error searching flights:', error);
-          // Handle errors during flight search
+          this.showResults = false; // Hide results on error
         });
     } else {
       console.error('Search form is invalid.');
-      // Handle form validation errors (e.g., display error messages)
     }
   }
 }
