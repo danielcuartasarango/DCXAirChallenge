@@ -8,47 +8,44 @@
 </head>
 
 <body>
-
-  <body>
+ 
     <div class="container">
       <div class="search-form-container">
         <form class="formulario" (submit)="onSubmit()" *ngIf="searchForm" [formGroup]="searchForm">
           <div class="origin-destination-row">
             <div class="mb-4 origin-destination-input">
-              <label for="origin" class="block text-gray-700">Origen:</label>
-              <input type="text" id="origin" formControlName="origin" class="form-input mt-1" required>
+              <label for="origin">Origen:</label>
+              <input type="text" id="origin" formControlName="origin" class="form-input" required>
             </div>
             <div class="mb-4 origin-destination-input">
-              <label for="destination" class="block text-gray-700">Destino:</label>
-              <input type="text" id="destination" formControlName="destination" class="form-input mt-1" required>
+              <label for="destination">Destino:</label>
+              <input type="text" id="destination" formControlName="destination" class="form-input" required>
             </div>
           </div>
           <div class="checkboxes-currency-row">
             <div class="mb-4 checkboxes-container">
-              <label for="oneWay" class="text-gray-700">Ida:</label>
+              <label for="oneWay">Ida:</label>
               <input type="radio" id="oneWay" formControlName="tripType" value="oneWay" class="form-radio mr-2">
             </div>
             <div class="mb-4 checkboxes-container">
-              <label for="roundTrip" class="text-gray-700">Ida y vuelta:</label>
+              <label for="roundTrip">Ida y vuelta:</label>
               <input type="radio" id="roundTrip" formControlName="tripType" value="roundTrip" class="form-radio mr-2">
             </div>
-            
+  
             <div class="mb-4 currency-select">
               <div class="mb-4 checkboxes-container2">
-                <label for="currency" class="block text-gray-700">Moneda: </label>
-
+                <label for="currency">Moneda: </label>
               </div>
               <div class="mb-4 checkboxes-container2">
-                <select id="currency" formControlName="currency" class="form-select mt-1" required>
+                <select id="currency" formControlName="currency" class="form-select" required>
                   <option value="USD">USD</option>
                   <option value="COP">COP</option>
                 </select>
               </div>
-
             </div>
           </div>
           <button type="submit" [disabled]="searchForm.invalid"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Buscar</button>
+            class="rounded text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline">Buscar</button>
         </form>
       </div>
       <div *ngIf="showResults">
@@ -59,7 +56,7 @@
         </div>
       </div>
     </div>
-  </body>
+ 
 </body>
 
 </html>

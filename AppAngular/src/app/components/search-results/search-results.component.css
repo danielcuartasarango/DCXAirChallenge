@@ -15,8 +15,8 @@
     margin: 1rem;
     padding: 1rem;
     border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Box shadow */
-    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(9, 144, 197, 0.3); /* Box shadow */
+    background-color: #f5f5f5;
   }
   
   /* Responsive: adjust card width based on screen size */
@@ -25,15 +25,11 @@
       width: 100%; /* 100% width on small screens */
     }
   }
-  @media (min-width: 769px) {
-    .flight-card {
-      min-width: 600px; /* 100% width on small screens */
-    }
-  }
+
 
 
   .flight-leg {
-    background-color: #eee; /* Adjust background color as needed */
+    background-color: #f5f5f5; /* Adjust background color as needed */
     border: 1px solid #ddd; /* Adjust border style, width, and color */
     padding: 5px 10px; /* Adjust padding as needed */
     margin: 5px; /* Adjust margin as needed */
@@ -41,8 +37,9 @@
     position: relative; /* Make the element a positioning context */
     
  
-  min-height: 40px;
-  max-width: 100px;
+  min-height: 30px;
+  max-width: 70px;
+  font-size: small;
 
   }
 
@@ -55,6 +52,7 @@
   top:25px; /* Set right position from the right edge */
 }
 .flight-details {
+  flex: 0;
     display: flex; /* Make flight-details a flex container */
   }
   

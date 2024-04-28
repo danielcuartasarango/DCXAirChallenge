@@ -56,6 +56,7 @@ namespace DCXAirChallenge.Application.Services
                 var lastDestination = currentRoute.Destination; // Obtener el último destino en la ruta actual
 
                 // Si el último destino coincide con el destino final, agregar la ruta a las posibles rutas
+                // Si el último destino coincide con el destino final, agregar la ruta a las posibles rutas
                 if (lastDestination == destination)
                 {
                     // Si el tipo de viaje es de ida y vuelta, agregar la ruta de regreso a la ruta actual
@@ -80,16 +81,18 @@ namespace DCXAirChallenge.Application.Services
                         // Concatenar la ruta de regreso a la ruta de ida
                         currentRoute.Flights.AddRange(returnRoute.Flights.Skip(1)); // Saltar el primer vuelo de la ruta de regreso para evitar duplicados
                         currentRoute.Price += returnRoute.Price;
-
-                        possibleRoutes.Add(currentRoute); // Agregar la ruta completa a las posibles rutas
                     }
-                    else
+
+                    // Verificar la moneda y multiplicar el precio final si es COP
+                    if (currency == "COP")
                     {
-                        possibleRoutes.Add(currentRoute); // Agregar la ruta de ida a las posibles rutas
+                        currentRoute.Price *= 3700;
                     }
 
+                    possibleRoutes.Add(currentRoute); // Agregar la ruta completa a las posibles rutas
                     continue; // Continuar con la siguiente iteración del bucle
                 }
+
 
                 // Iterar sobre las rutas disponibles desde el último destino en la ruta actual
                 foreach (var nextRoute in _routes.Where(r => r.Origin == lastDestination))
