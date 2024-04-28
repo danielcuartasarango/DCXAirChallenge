@@ -41,9 +41,9 @@
     position: relative; /* Make the element a positioning context */
     
  
-  justify-content: left; 
-  min-height: 50px;
-  max-width: 200px;
+  min-height: 40px;
+  max-width: 100px;
+
   }
 
   
