@@ -27,18 +27,18 @@ export class SearchFormComponent implements OnInit {
       origin: ['', Validators.required],
       destination: ['', Validators.required],
       currency: ['USD'],
-      roundTrip: [false]
+      tripType: ['oneWay'] // Default trip type to 'oneWay'
     });
   }
 
   onSubmit() {
     if (this.searchForm.valid) {
       const searchParams = this.searchForm.value;
+      console.log(searchParams)
       this.flightSearchService.searchFlights(searchParams)
         .subscribe(response => {
           this.flightSearchResults = response;
           this.showResults = true; // Show results if data is received
-          console.log('Flight search results:', response);
         }, error => {
           console.error('Error searching flights:', error);
           this.showResults = false; // Hide results on error

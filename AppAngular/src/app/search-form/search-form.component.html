@@ -1,47 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulario de Búsqueda</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container mx-auto">
-  <div class="flex flex-col">  <div class="max-w-md mx-auto my-10 bg-white p-8 rounded-lg shadow-lg mb-10">
-      <form class="formulario" (submit)="onSubmit()" *ngIf="searchForm" [formGroup]="searchForm">
-        <div class="mb-4">
-          <label for="origin" class="block text-gray-700">Origen:</label>
-          <input type="text" id="origin" formControlName="origin" class="form-input mt-1 block w-full" required>
-        </div>
-        <div class="mb-4">
-          <label for="destination" class="block text-gray-700">Destino:</label>
-          <input type="text" id="destination" formControlName="destination" class="form-input mt-1 block w-full" required>
-        </div>
-        <div class="mb-4">
-          <label for="currency" class="block text-gray-700">Moneda:</label>
-          <select id="currency" formControlName="currency" class="form-select mt-1 block w-full" required>
-            <option value="USD">USD</option>
-            <option value="COP">COP</option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <input type="checkbox" id="roundTrip" formControlName="roundTrip" class="form-checkbox mr-2">
-          <label for="roundTrip" class="text-gray-700">Ida y vuelta</label>
-        </div>
-        <button type="submit" [disabled]="searchForm.invalid" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Buscar</button>
-      </form>
-    </div>
+  <body>
+    <div class="container">
+      <div class="search-form-container">
+        <form class="formulario" (submit)="onSubmit()" *ngIf="searchForm" [formGroup]="searchForm">
+          <div class="origin-destination-row">
+            <div class="mb-4 origin-destination-input">
+              <label for="origin" class="block text-gray-700">Origen:</label>
+              <input type="text" id="origin" formControlName="origin" class="form-input mt-1" required>
+            </div>
+            <div class="mb-4 origin-destination-input">
+              <label for="destination" class="block text-gray-700">Destino:</label>
+              <input type="text" id="destination" formControlName="destination" class="form-input mt-1" required>
+            </div>
+          </div>
+          <div class="checkboxes-currency-row">
+            <div class="mb-4 checkboxes-container">
+              <label for="oneWay" class="text-gray-700">Ida:</label>
+              <input type="radio" id="oneWay" formControlName="tripType" value="oneWay" class="form-radio mr-2">
+            </div>
+            <div class="mb-4 checkboxes-container">
+              <label for="roundTrip" class="text-gray-700">Ida y vuelta:</label>
+              <input type="radio" id="roundTrip" formControlName="tripType" value="roundTrip" class="form-radio mr-2">
+            </div>
+            
+            <div class="mb-4 currency-select">
+              <div class="mb-4 checkboxes-container2">
+                <label for="currency" class="block text-gray-700">Moneda: </label>
 
-    <div *ngIf="showResults">
-      <div class="max-w-md mx-auto my-10 bg-white p-8 rounded-lg shadow-lg border-bottom">
-        <app-search-results [flightResults]="flightSearchResults"></app-search-results>
+              </div>
+              <div class="mb-4 checkboxes-container2">
+                <select id="currency" formControlName="currency" class="form-select mt-1" required>
+                  <option value="USD">USD</option>
+                  <option value="COP">COP</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <button type="submit" [disabled]="searchForm.invalid"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Buscar</button>
+        </form>
+      </div>
+      <div *ngIf="showResults">
+        <div class="search-results-container">
+          <div class="max-w-md mx-auto bg-white p-8">
+            <app-search-results [flightResults]="flightSearchResults"></app-search-results>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-
+  </body>
 </body>
+
 </html>

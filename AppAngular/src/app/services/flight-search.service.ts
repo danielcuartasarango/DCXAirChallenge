@@ -11,7 +11,7 @@ export class FlightSearchService {
   constructor(private http: HttpClient) { }
 
   searchFlights(params: any): Observable<any> {
-    const apiUrl = `${environment.apiUrl}/${environment.get_routes}?origin=${params.origin}&destination=${params.destination}`;
+    const apiUrl = `${environment.apiUrl}/${environment.get_routes}?origin=${params.origin}&destination=${params.destination}&tripType=${params.tripType}&currency=${params.currency}`;
     console.log(apiUrl);
     // Utiliza HTTP GET en lugar de HTTP POST
     return this.http.get(apiUrl);

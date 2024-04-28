@@ -3,6 +3,12 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 1rem;
+    min-width: 800px;
+    flex-direction: column; 
+    
+  }
+  .result-title {
+    text-align: center; /* Centra el contenido horizontalmente */
   }
   
   .flight-card {
@@ -11,7 +17,6 @@
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Box shadow */
     background-color: #fff;
-    width: 300px; /* Base width */
   }
   
   /* Responsive: adjust card width based on screen size */
@@ -20,11 +25,42 @@
       width: 100%; /* 100% width on small screens */
     }
   }
+  @media (min-width: 769px) {
+    .flight-card {
+      min-width: 600px; /* 100% width on small screens */
+    }
+  }
+
+
   .flight-leg {
     background-color: #eee; /* Adjust background color as needed */
     border: 1px solid #ddd; /* Adjust border style, width, and color */
     padding: 5px 10px; /* Adjust padding as needed */
     margin: 5px; /* Adjust margin as needed */
-    display: inline-block; /* Ensures elements appear side-by-side */
+    display: flex; /* Allow us to flex the child elements */
+    position: relative; /* Make the element a positioning context */
+    
+ 
+  justify-content: left; 
+  min-height: 50px;
+  max-width: 200px;
+  }
+
+  
+  .carrier,
+.flight-number {
+  position: absolute; /* Make spans absolute relative to their parent */
+  bottom: 5px; /* Set bottom position from the bottom edge */
+  right: 5px;
+  top:25px; /* Set right position from the right edge */
+}
+.flight-details {
+    display: flex; /* Make flight-details a flex container */
+  }
+  
+  .flight-info,
+  .flight-legs {
+    flex: 1; /* Make both columns take up equal space */
+    padding: 10px; /* Add some padding for content */
   }
   

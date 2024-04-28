@@ -1,27 +1,30 @@
-<div *ngIf="flightResults && flightResults.length > 0">
-  <div class="flight-results">
-    <div *ngFor="let flight of flightResults">
-      <div class="flight-card">
-        <div class="flight-details">
-          <div class="flight-info">
-            <span class="origin">{{ flight.origin }}</span>
-            <span class="destination">{{ flight.destination }}</span>
-            <span class="price">USD$ {{ flight.price }}</span>
-          </div>
-          <div class="flight-legs">
-            <div class="flight-leg-container">
-              <div class="flight-leg" *ngFor="let leg of flight.flights">
-                <span class="origin">{{ leg.origin }} - </span>
-                <span class="destination">{{ leg.destination }}</span>
+<div class="flight-card">
+  <div *ngIf="flightResults && flightResults.length > 0">
+    <div class="flight-results">
+      <div class="result-title">
+        <h2>DCX - Result</h2>
+      </div>
+      <div *ngFor="let flight of flightResults">
+        <div class="flight-card">
+          <div class="flight-details">
+            <div class="flight-info"> <span class="origin">{{ flight.origin }} -  {{ flight.destination }}</span>
+               <br/>
+              <span class="price"> Precio: $ {{ flight.price }}</span>
+            </div>
+            <div class="flight-legs"> <div class="flight-leg-container">
+                <div class="flight-leg" *ngFor="let leg of flight.flights">
+                  <span class="origin">{{ leg.origin }} - </span>
+                  <span class="destination">{{ leg.destination }}</span>
+                  <span class="carrier">{{ flight.flights[0].transport.flightCarrier }} {{ flight.flights[0].transport.flightNumber }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="flight-carrier">
-            <span class="carrier">{{ flight.flights[0].transport.flightCarrier }}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
 
