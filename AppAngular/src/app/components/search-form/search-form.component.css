@@ -124,6 +124,7 @@ button[type="submit"]:hover {
   padding: 10px;
   flex-wrap: wrap;
 }
+ 
 
 .checkboxes-container {
   display: flex;

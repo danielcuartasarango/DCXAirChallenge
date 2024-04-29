@@ -17,13 +17,15 @@
       <div *ngFor="let flight of flightResults">
         <div class="flight-card">
           <div class="flight-details">
-            <div class="flight-info"> <span class="origin">{{ flight.origin }} -  {{ flight.destination }}</span>
+            <div class="flight-info"> 
+              <span class="origin">{{ flight.origin }}   -   {{ flight.destination }}</span>
                <br/>
               <span class="price"> Precio: $ {{ flight.price }}</span>
             </div>
-            <div class="flight-legs"> <div class="flight-leg-container">
+            
+            <div> <div class="flight-leg-container">
                 <div class="flight-leg" *ngFor="let leg of flight.flights">
-                  <span class="origin">{{ leg.origin }} - </span>
+                  <span class="origin">{{ leg.origin }}  -  </span>
                   <span class="destination">{{ leg.destination }}</span>
                   <span class="carrier">{{ flight.flights[0].transport.flightCarrier }} {{ flight.flights[0].transport.flightNumber }}</span>
                 </div>

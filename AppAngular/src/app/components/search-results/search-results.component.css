@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 1rem;
-    min-width: 800px;
+  
     flex-direction: column; 
     
   }
@@ -25,8 +25,13 @@
       width: 100%; /* 100% width on small screens */
     }
   }
+  @media (min-width: 768px) {
+    .flight-results {
+      min-width: 800px;
+    }
+  }
 
-
+ 
 
   .flight-leg {
     background-color: #f5f5f5; /* Adjust background color as needed */
@@ -49,16 +54,21 @@
   position: absolute; /* Make spans absolute relative to their parent */
   bottom: 5px; /* Set bottom position from the bottom edge */
   right: 5px;
-  top:25px; /* Set right position from the right edge */
+  top:25px; 
+  font-size: x-small;/* Set right position from the right edge */
 }
 .flight-details {
   flex: 0;
     display: flex; /* Make flight-details a flex container */
   }
   
-  .flight-info,
-  .flight-legs {
+  .flight-info {
     flex: 1; /* Make both columns take up equal space */
-    padding: 10px; /* Add some padding for content */
+    padding: 10px;
+    }
+
+  .flight-legs {
+    display: flex;
+    flex-wrap: wrap;
   }
   
