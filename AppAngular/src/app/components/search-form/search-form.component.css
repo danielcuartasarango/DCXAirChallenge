@@ -1,6 +1,14 @@
 body {
   font-family: Arial, sans-serif;
 }
+/* Styles for the notification container (overall look and feel) */
+.my-swal-title {
+  font-family: 'Arial', sans-serif; /* Cambia 'Arial' por la fuente que desees utilizar */
+}
+
+.my-swal-content {
+  font-family: 'Arial', sans-serif; /* Cambia 'Arial' por la fuente que desees utilizar */
+}
 
 .container {
   display: flex;
@@ -148,3 +156,5 @@ button[type="submit"]:hover {
   display: flex;
   margin-bottom: 20px;
 }
+
+

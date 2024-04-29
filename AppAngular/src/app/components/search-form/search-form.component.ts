@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FlightSearchService } from '../../services/flight-search.service';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-search-form',
@@ -34,17 +35,41 @@ export class SearchFormComponent implements OnInit {
   onSubmit() {
     if (this.searchForm.valid) {
       const searchParams = this.searchForm.value;
-      console.log(searchParams)
+      console.log(searchParams);
+      this.flightSearchResults = [];
+  
       this.flightSearchService.searchFlights(searchParams)
         .subscribe(response => {
-          this.flightSearchResults = response;
-          this.showResults = true; // Show results if data is received
+          if (response.length === 0) {
+            this.showNoRoutesAvailableMessage(searchParams.origin,searchParams.destination );
+          } else {
+            this.flightSearchResults = response;
+            this.showResults = true;
+          }
         }, error => {
           console.error('Error searching flights:', error);
-          this.showResults = false; // Hide results on error
+          this.showResults = false;
         });
     } else {
       console.error('Search form is invalid.');
     }
   }
+
+  private showNoRoutesAvailableMessage(origin: string, destination:string): void {
+    Swal.fire({
+      icon: 'warning',
+      title: 'No hay rutas disponibles',
+      text: `Lo siento, no fue posible encontrar una ruta de ${origin} a ${destination}`,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Aceptar',
+      customClass: {
+        popup: 'my-swal-popup', // Clase para el contenedor del modal
+        title: 'my-swal-title', // Clase para el título
+        confirmButton: 'my-swal-confirm-button', // Clase para el botón de confirmación
+      },
+    });
+  }
+  
+  
+  
 }

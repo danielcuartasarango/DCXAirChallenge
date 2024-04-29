@@ -1,4 +1,5 @@
 ﻿using DCXAirChallenge.Domain.Entities;
+using DCXAirChallenge.Domain.Enums;
 using DCXAirChallenge.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
@@ -6,116 +7,166 @@ using System.Linq;
 
 namespace DCXAirChallenge.Application.Services
 {
+    // Clase encargada de gestionar las rutas disponibles y encontrar rutas entre un origen y un destino
     public class RouteService
     {
+        // Lista de rutas disponibles
         private readonly List<Routes> _routes;
 
-        // Constructor de la clase RouteService
+        // Constructor de la clase RouteService que carga las rutas desde un archivo JSON
         public RouteService(RouteLoaderService routeLoaderService)
         {
-            // Cargar las rutas desde el servicio de carga de rutas
-            _routes = routeLoaderService.LoadRoutes("Data/markets.json");
+            // Obtener las rutas desde el RouteLoaderService
+            _routes = routeLoaderService.GetRoutes();
         }
 
+        // Clase interna que representa la información de una ruta
         public class RouteInformation
         {
-            public List<Routes> Flights { get; set; }
-            public double Price { get; set; } // Cambiar el tipo a double
-            public string Origin { get; set; }
-            public string Destination { get; set; }
+            public List<Routes> Flights { get; set; }  
+            public double Price { get; set; }  
+            public string Origin { get; set; } 
+            public string Destination { get; set; }  
         }
 
-        // Método para encontrar las rutas posibles entre un origen y un destino
+        // Método principal para encontrar las rutas posibles entre un origen y un destino
         public List<RouteInformation> GetRoutesByOriginAndDestination(string origin, string destination, string currency, string tripType)
         {
-            // Convertir el origen y el destino a mayúsculas y eliminar espacios en blanco al inicio y al final
-            origin = origin.Trim().ToUpper();
-            destination = destination.Trim().ToUpper();
+            // Normalizar los inputs de origen y destino
+            origin = NormalizeInput(origin);
+            destination = NormalizeInput(destination);
 
             // Lista para almacenar todas las rutas posibles encontradas
             var possibleRoutes = new List<RouteInformation>();
 
-            // Cola para realizar el recorrido en anchura (BFS) a través de las rutas
+            // Cola para realizar el recorrido en anchura a través de las rutas
             var queue = new Queue<RouteInformation>();
 
             // Inicializar la cola con la ruta de salida desde el origen
-            var initialRoute = new RouteInformation
-            {
-                Flights = new List<Routes>(), // Inicializar la lista de vuelos
-                Price = 0,
-                Origin = origin,
-                Destination = origin // Destino inicial es el origen
-            };
+            var initialRoute = InitializeRoute(origin);
 
             queue.Enqueue(initialRoute);
 
             // Realizar el recorrido en anchura a través de las rutas
             while (queue.Count > 0)
             {
-                var currentRoute = queue.Dequeue(); // Obtener la siguiente ruta de la cola
-                var lastDestination = currentRoute.Destination; // Obtener el último destino en la ruta actual
+                var currentRoute = queue.Dequeue();
+                var lastDestination = currentRoute.Destination;
 
-                // Si el último destino coincide con el destino final, agregar la ruta a las posibles rutas
-                // Si el último destino coincide con el destino final, agregar la ruta a las posibles rutas
-                if (lastDestination == destination)
+                if (IsFinalDestination(lastDestination, destination))
                 {
-                    // Si el tipo de viaje es de ida y vuelta, agregar la ruta de regreso a la ruta actual
-                    if (tripType == "roundTrip")
-                    {
-                        // Crear la ruta de regreso invirtiendo las rutas
-                        // Crear la ruta de regreso invirtiendo las rutas
-                        var returnRoute = new RouteInformation
-                        {
-                            Flights = currentRoute.Flights.Select(flight => new Routes(
-                                flight.Destination, // Intercambiar origen y destino
-                                flight.Origin,      // Intercambiar origen y destino
-                                flight.Price,
-                                flight.Transport
-                            )).Reverse().ToList(),
-                            Price = currentRoute.Price,
-                            Origin = destination, // El origen de la ruta de regreso es el destino de la ruta de ida
-                            Destination = origin  // El destino de la ruta de regreso es el origen de la ruta de ida
-                        };
-
-
-                        // Concatenar la ruta de regreso a la ruta de ida
-                        currentRoute.Flights.AddRange(returnRoute.Flights.Skip(1)); // Saltar el primer vuelo de la ruta de regreso para evitar duplicados
-                        currentRoute.Price += returnRoute.Price;
-                    }
-
-                    // Verificar la moneda y multiplicar el precio final si es COP
-                    if (currency == "COP")
-                    {
-                        currentRoute.Price *= 3700;
-                    }
-
-                    possibleRoutes.Add(currentRoute); // Agregar la ruta completa a las posibles rutas
-                    continue; // Continuar con la siguiente iteración del bucle
+                    ProcessFinalDestination(currentRoute, tripType, currency, possibleRoutes);
+                    continue;
                 }
 
-
-                // Iterar sobre las rutas disponibles desde el último destino en la ruta actual
-                foreach (var nextRoute in _routes.Where(r => r.Origin == lastDestination))
-                {
-                    // Evitar ciclos infinitos y la repetición de escalas
-                    if (!currentRoute.Flights.Any(r => r.Destination == nextRoute.Destination) &&
-                        !currentRoute.Flights.Any(r => r.Origin == nextRoute.Destination)) // Evitar volver a visitar un destino ya visitado
-                    {
-                        var newRoute = new RouteInformation
-                        {
-                            Flights = currentRoute.Flights.ToList(), // Copiar la lista de vuelos de la ruta actual
-                            Price = currentRoute.Price + nextRoute.Price, // Sumar el precio de la nueva ruta al precio actual
-                            Origin = currentRoute.Origin,
-                            Destination = nextRoute.Destination
-                        };
-
-                        newRoute.Flights.Add(nextRoute); // Agregar la próxima ruta a la nueva ruta
-                        queue.Enqueue(newRoute); // Agregar la nueva ruta a la cola para su procesamiento posterior
-                    }
-                }
+                ExploreNextRoutes(currentRoute, queue);
             }
 
             return possibleRoutes;
+        }
+
+        // Método para normalizar el input de origen o destino
+        private string NormalizeInput(string input)
+        {
+            return input.Trim().ToUpper();
+        }
+
+        // Método para inicializar una nueva ruta con el origen dado
+        private RouteInformation InitializeRoute(string origin)
+        {
+            return new RouteInformation
+            {
+                Flights = new List<Routes>(), 
+                Price = 0,  
+                Origin = origin,  
+                Destination = origin  
+            };
+        }
+
+        // Método para verificar si el último destino en la ruta es el destino final
+        private bool IsFinalDestination(string lastDestination, string destination)
+        {
+            return lastDestination == destination;
+        }
+
+        // Método para procesar una ruta final y agregarla a las posibles rutas
+        private void ProcessFinalDestination(RouteInformation currentRoute, string tripType, string currency, List<RouteInformation> possibleRoutes)
+        {
+            if (NormalizeInput(tripType) == "ROUNDTRIP")
+            {
+                AddReturnRoute(currentRoute);
+            }
+
+            AdjustCurrency(currentRoute, currency);
+            possibleRoutes.Add(currentRoute);
+        }
+
+        // Método para agregar una ruta de regreso a la ruta actual
+        private void AddReturnRoute(RouteInformation currentRoute)
+        {
+           
+            var returnRoute = new RouteInformation
+            {
+                Flights = currentRoute.Flights.Select(flight => new Routes(
+                    flight.Destination,  
+                    flight.Origin,  
+                    flight.Price,
+                    flight.Transport
+                )).Reverse().ToList(),
+                Price = currentRoute.Price,
+                Origin = currentRoute.Destination, 
+                Destination = currentRoute.Origin  
+            };
+
+            // Concatenar la ruta de regreso a la ruta actual
+            currentRoute.Flights.AddRange(returnRoute.Flights);  
+            currentRoute.Price += returnRoute.Price;  
+        }
+
+        // Método para ajustar el precio de la ruta según la moneda
+        private void AdjustCurrency(RouteInformation currentRoute, string currency)
+        {
+            if (NormalizeInput(currency) == "COP")
+            {
+                currentRoute.Price *= (int)Currency.COP;  
+            }
+        }
+
+        // Método para explorar las rutas disponibles desde el último destino en la ruta actual
+        private void ExploreNextRoutes(RouteInformation currentRoute, Queue<RouteInformation> queue)
+        {
+            var lastDestination = currentRoute.Destination;
+
+            foreach (var nextRoute in _routes.Where(r => r.Origin == lastDestination))
+            {
+                if (!HasVisitedDestination(currentRoute, nextRoute.Destination))
+                {
+                    var newRoute = CreateNewRoute(currentRoute, nextRoute);
+                    queue.Enqueue(newRoute);
+                }
+            }
+        }
+
+        // Método para verificar si ya se ha visitado un destino específico en la ruta actual
+        private bool HasVisitedDestination(RouteInformation currentRoute, string destination)
+        {
+            return currentRoute.Flights.Any(r => r.Destination == destination) ||
+                   currentRoute.Flights.Any(r => r.Origin == destination);
+        }
+
+        // Método para crear una nueva ruta a partir de la ruta actual y la siguiente ruta disponible
+        private RouteInformation CreateNewRoute(RouteInformation currentRoute, Routes nextRoute)
+        {
+            var newRoute = new RouteInformation
+            {
+                Flights = currentRoute.Flights.ToList(),  
+                Price = currentRoute.Price + nextRoute.Price,  
+                Origin = currentRoute.Origin,  
+                Destination = nextRoute.Destination  
+            };
+
+            newRoute.Flights.Add(nextRoute); 
+            return newRoute;
         }
     }
 }
