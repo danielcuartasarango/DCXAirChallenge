@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración de servicios
+
 builder.Services.AddSingleton<RouteLoaderService>();
 builder.Services.AddSingleton<RouteService>();
 builder.Services.AddControllers();
@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Replace with your Angular project's origin
+        policy.WithOrigins("http://localhost:4200") 
              .AllowAnyHeader()
              .AllowAnyMethod();
     });
@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configura el pipeline de solicitud HTTP.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
-app.UseCors("AllowAngular"); // Add this line before MapControllers
+app.UseCors("AllowAngular");
 
 app.UseAuthorization();
 

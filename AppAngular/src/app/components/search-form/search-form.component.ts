@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 export class SearchFormComponent implements OnInit {
   searchForm!: FormGroup;
   flightSearchResults: any[] = [];
-  showResults = false; // Flag to control results display
+  showResults = false;  
 
   constructor(private fb: FormBuilder, private flightSearchService: FlightSearchService) { }
 
@@ -28,7 +28,7 @@ export class SearchFormComponent implements OnInit {
       origin: ['', Validators.required],
       destination: ['', Validators.required],
       currency: ['USD'],
-      tripType: ['oneWay'] // Default trip type to 'oneWay'
+      tripType: ['oneWay']  
     });
   }
 
@@ -37,7 +37,7 @@ export class SearchFormComponent implements OnInit {
       const searchParams = this.searchForm.value;
       console.log(searchParams);
       this.flightSearchResults = [];
-  
+      this.showResults = false;
       this.flightSearchService.searchFlights(searchParams)
         .subscribe(response => {
           if (response.length === 0) {
@@ -63,9 +63,9 @@ export class SearchFormComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       confirmButtonText: 'Aceptar',
       customClass: {
-        popup: 'my-swal-popup', // Clase para el contenedor del modal
-        title: 'my-swal-title', // Clase para el título
-        confirmButton: 'my-swal-confirm-button', // Clase para el botón de confirmación
+        popup: 'my-swal-popup',  
+        title: 'my-swal-title',  
+        confirmButton: 'my-swal-confirm-button', 
       },
     });
   }
