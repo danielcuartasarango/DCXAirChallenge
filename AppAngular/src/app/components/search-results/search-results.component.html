@@ -23,7 +23,7 @@
               <span class="price"> Precio: $ {{ flight.price }}</span>
             </div>
             
-            <div class="flight-leg-container"> <!-- Contenedor de las cards -->
+            <div class="flight-leg-container">  
               <div class="flight-leg" *ngFor="let leg of flight.flights">
                 <span class="origin">{{ leg.origin }} -</span>
                 <span class="destination">{{ leg.destination }}</span>

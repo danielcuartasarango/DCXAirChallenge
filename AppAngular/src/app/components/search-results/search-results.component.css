@@ -40,12 +40,12 @@
   
 
   .flight-leg {
-    background-color: #f5f5f5; /* Adjust background color as needed */
-    border: 1px solid #ddd; /* Adjust border style, width, and color */
-    padding: 5px 10px; /* Adjust padding as needed */
-    margin: 5px; /* Adjust margin as needed */
-    display: flex; /* Allow us to flex the child elements */
-    position: relative; /* Make the element a positioning context */
+    background-color: #f5f5f5;  
+    border: 1px solid #ddd;  
+    padding: 5px 10px;  
+    margin: 5px;  
+    display: flex;  
+    position: relative;  
     min-height: 30px;
     max-width: 70px;
     font-size: small;
@@ -55,19 +55,18 @@
   
   .carrier,
 .flight-number {
-  position: absolute; /* Make spans absolute relative to their parent */
-  bottom: 5px; /* Set bottom position from the bottom edge */
-  right: 5px;
+  position: absolute;  
+  bottom: 5px;  
   top:25px; 
-  font-size: x-small;/* Set right position from the right edge */
+  font-size: x-small; 
 }
 .flight-details {
   flex: 0;
-    display: flex; /* Make flight-details a flex container */
+    display: flex;  
   }
   
   .flight-info {
-    flex: 1; /* Make both columns take up equal space */
+    flex: 1;  
     padding: 10px;
     }
 

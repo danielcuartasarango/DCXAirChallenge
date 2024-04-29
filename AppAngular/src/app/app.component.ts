@@ -11,6 +11,6 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'AppAngular';
-  constructor(private http: HttpClient) { } // Inyecta HttpClient en el constructor
+  constructor(private http: HttpClient) { } 
 
 }
